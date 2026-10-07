@@ -13,9 +13,7 @@
         .header-app { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 15px; margin-bottom: 25px; }
         .header-title h1 { margin: 0; font-size: 20px; color: var(--primary); font-weight: bold; }
         .header-title p { margin: 5px 0 0 0; font-size: 13px; color: #666; }
-        .logo-txt { text-align: right; }
-        .logo-txt .red { color: var(--accent); font-weight: 900; font-size: 22px; margin: 0; }
-        .logo-txt .sub { color: var(--secondary); font-size: 12px; font-weight: bold; margin: 2px 0 0 0; }
+        .logo-svg-container { width: 180px; height: auto; display: block; }
         h2 { font-size: 15px; border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 25px; text-transform: uppercase; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media(max-width: 500px) { .grid { grid-template-columns: 1fr; } }
@@ -26,13 +24,14 @@
         .checkbox-group input { width: 18px; height: 18px; accent-color: var(--primary); }
         .checkbox-group label { font-size: 14px; font-weight: normal; }
         .photo-section { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #ccc; }
-        .photo-input-wrapper { position: relative; }
+        .photo-section label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 14px; color: var(--secondary); }
+        .photo-input-wrapper { position: relative; margin-top: 5px; }
         .btn-capture { background: #e1e1e1; padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-weight: 500; font-size: 14px; border: 1px solid #bbb; }
         .photo-section input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
         .preview-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
         .preview-box { width: 105px; position: relative; background: #fff; padding: 4px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #ddd; }
         .preview-box img { width: 100%; height: 75px; object-fit: cover; border-radius: 3px; }
-        .btn-delete-pic { position: absolute; top: -7px; right: -7px; background: rgba(227,6,19,0.9); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-delete-pic { position: absolute; top: -7px; right: -7px; background: rgba(227,6,19,0.9); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
         .summary-box { background: #eef2f7; padding: 15px; border-radius: 8px; margin-top: 25px; border-left: 4px solid var(--primary); font-size: 13px; }
         .action-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
         .btn-submit { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
@@ -47,7 +46,17 @@
             <h1>Überprüfung für Durchlauferhitzer</h1>
             <p>Elektro Fachbetrieb Jordine | GBP | GmbH</p>
         </div>
-        <div class="logo-txt"><p class="red">%23ELEKTRO</p><p class="sub">Fachbetrieb Jordine</p></div>
+        <!-- Das originale Firmenlogo als hochauflösender SVG-Vektor-Nachbau -->
+        <svg class="logo-svg-container" viewBox="0 0 540 230" xmlns="http://w3.org">
+            <path d="M 170 110 L 285 45 L 480 45 L 480 135 L 5 135" stroke="#1d1d1b" stroke-width="4" fill="none" stroke-linejoin="round"/>
+            <path d="M 480 90 L 510 90 L 510 102 L 522 102 L 522 108 L 510 108 L 510 120 L 480 120" stroke="#1d1d1b" stroke-width="4" fill="none" stroke-linejoin="round"/>
+            <path d="M 510 98 L 522 98 L 522 104" stroke="#1d1d1b" stroke-width="4" fill="none" stroke-linejoin="round"/>
+            <path d="M 5 135 L 65 135 Q 80 55 95 135 T 125 135 Q 140 55 155 135 L 180 135" stroke="#e30613" stroke-width="3" fill="none"/>
+            <path d="M 15 135 L 75 135 Q 90 55 105 135 T 135 135 Q 150 55 165 135 L 185 135" stroke="#1d1d1b" stroke-width="3" fill="none"/>
+            <text x="335" y="98" font-family="'Arial Black', sans-serif" font-weight="900" font-size="44" fill="#e30613" text-anchor="middle" letter-spacing="4">ELEKTRO</text>
+            <text x="335" y="165" font-family="'Arial', sans-serif" font-weight="bold" font-size="34" fill="#1d1d1b" text-anchor="middle" letter-spacing="3">Fachbetrieb</text>
+            <text x="260" y="215" font-family="'Arial', sans-serif" font-weight="bold" font-size="24" fill="#1d1d1b" text-anchor="middle">Jordine <tspan fill="#e30613">|</tspan> GBP <tspan fill="#e30613">|</tspan> GmbH</text>
+        </svg>
     </div>
     <form id="protocolForm" onsubmit="event.preventDefault();">
         <h2>Stammdaten</h2>
@@ -69,10 +78,10 @@
         </div>
         <div class="form-group"><label>Aufnahme Kabelweg (Länge in Meter)</label><input type="text" id="kabelweg" placeholder="Kabelweglänge" oninput="updateSummary()"></div>
         <h2>Fotodokumentation</h2>
-        <div class="photo-section" data-cat="Verteiler_Einbauort"><label>Verteiler + Einbauort</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
-        <div class="photo-section" data-cat="Zaehler_SLS"><label>Verteiler (Zähler & SLS-Schalter)</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
-        <div class="photo-section" data-cat="Wasseranschluss_Kueche"><label>Wasseranschluss Küche</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
-        <div class="photo-section" data-cat="Gastherme"><label>Gastherme</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <div class="photo-section" data-cat="Verteiler_Einbauort"><label>Verteiler + Einbauort</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" capture="environment" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <div class="photo-section" data-cat="Zaehler_SLS"><label>Verteiler (Zähler & SLS-Schalter)</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" capture="environment" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <div class="photo-section" data-cat="Wasseranschluss_Kueche"><label>Wasseranschluss Küche</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" capture="environment" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <div class="photo-section" data-cat="Gastherme"><label>Gastherme</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" capture="environment" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
         <h2>Bemerkungen / Notizen</h2>
         <div class="form-group"><textarea id="notizen" rows="3" placeholder="Zusätzliche Einträge..." oninput="updateSummary()"></textarea></div>
         <div class="summary-box"><strong>🔍 Live-Vorschau:</strong><div id="summaryContent"></div></div>
@@ -96,7 +105,7 @@
     }
     
     function processPhoto(input) {
-        if (!input.files || !input.files[0]) return;
+        if (!input.files || !input.files) return;
         const category = input.closest('.photo-section').getAttribute('data-cat');
         const container = input.closest('.photo-section').querySelector('.preview-container');
         const nr = document.getElementById('auftragsnummer').value || 'OhneNummer';
@@ -132,7 +141,7 @@
             };
             img.src = e.target.result;
         };
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(input.files);
     }
     
     function deletePhoto(id) { 
@@ -161,22 +170,26 @@
     
     function generatePDF() {
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        // Titel oben links
+        // 1. Blaue Hauptüberschrift links oben
         doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(0, 86, 179); 
         doc.text("Überprüfung für Durchlauferhitzer", 20, 24);
         
-        // Logo-Ersatz auf Basis deines Beispiels (Dachform-Vektorlinien)
+        // 2. Offizielles Firmenlogo maßgetreu in die rechte obere Ecke zeichnen
         doc.setLineWidth(0.4); doc.setDrawColor(29, 29, 27);
-        doc.line(150, 25, 160, 15); doc.line(160, 15, 185, 15); doc.line(185, 15, 185, 25); doc.line(135, 25, 190, 25);
-        doc.setFontSize(8); doc.setTextColor(227, 6, 19); doc.setFont("helvetica", "bold"); doc.text("ELEKTRO", 160, 12);
+        doc.line(146, 23, 163, 13); doc.line(163, 13, 192, 13); doc.line(192, 13, 192, 27); doc.line(121, 27, 192, 27);
+        doc.line(192, 20, 196, 20); doc.line(196, 20, 196, 22); doc.line(196, 22, 198, 22); doc.line(198, 22, 198, 23); doc.line(196, 23, 196, 25); doc.line(196, 25, 192, 25);
+        doc.setDrawColor(227, 6, 19); doc.setLineWidth(0.3);
+        doc.line(122, 27, 131, 27); doc.line(140, 27, 149, 27);
+        doc.setFontSize(7); doc.setTextColor(227, 6, 19); doc.setFont("helvetica", "bold"); doc.text("ELEKTRO", 170, 21);
+        doc.setFontSize(5.5); doc.setTextColor(29, 29, 27); doc.text("Fachbetrieb Jordine", 166, 25);
         
         // Trennlinie unter Header
         doc.setDrawColor(200, 200, 200); doc.line(20, 31, 190, 31);
         
         // Stammdaten Titel
-        doc.setFontSize(14); doc.setTextColor(29, 29, 27); doc.text("Stammdaten", 20, 42);
+        doc.setFontSize(14); doc.setTextColor(29, 29, 27); doc.setFont("helvetica", "bold"); doc.text("Stammdaten", 20, 42);
         
-        // Daten Zeilen
+        // Stammdaten Werte
         doc.setFontSize(10);
         let y = 50; 
         const lbls = [
@@ -186,12 +199,12 @@
             ["Adresse / Objekt:", document.getElementById('adresse').value || '-']
         ];
         lbls.forEach(l => { 
-            doc.setFont("helvetica", "normal"); doc.text(l[0], 20, y); 
-            doc.setFont("helvetica", "bold"); doc.text(l[1], 55, y); 
+            doc.setFont("helvetica", "normal"); doc.text(l, 20, y); 
+            doc.setFont("helvetica", "bold"); doc.text(l, 55, y); 
             y += 7; 
         });
         
-        // Technische Daten
+        // Technische Daten Block
         y += 4; doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Technische Parameter & Befunde", 20, y); 
         doc.line(20, y+2, 190, y+2); y += 10;
         
@@ -208,8 +221,8 @@
             ["Aufnahme Kabelweg (Länge):", (document.getElementById('kabelweg').value || '-') + " Meter"]
         ];
         tf.forEach(f => { 
-            doc.setFont("helvetica", "normal"); doc.text(f[0], 20, y); 
-            doc.setFont("helvetica", "bold"); doc.text(f[1], 105, y); 
+            doc.setFont("helvetica", "normal"); doc.text(f, 20, y); 
+            doc.setFont("helvetica", "bold"); doc.text(f, 105, y); 
             y += 7; 
         });
         
@@ -219,7 +232,7 @@
         
         const sn = doc.splitTextToSize(document.getElementById('notizen').value || 'Keine weiteren Einträge.', 170); doc.text(sn, 20, y);
         
-        // Einheitliche Fußzeile am Seitenende (Exakt wie im Erdungs-Protokoll)
+        // 3. Gesetzte Fußzeile mit der exakten Firmenadresse am Seitenende
         doc.setFontSize(8); doc.setTextColor(150, 150, 150); 
         doc.text("Erstellt durch ABA Durchlauferhitzercheck-System", 20, 283); 
         doc.text("Seite 1 von 1", 173, 283); 
