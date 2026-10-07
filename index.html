@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Überprüfung für Durchlauferhitzer</title>
+    <script src="https://cloudflare.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root { --primary: #0056b3; --accent: #e30613; --secondary: #1d1d1b; --bg: #f4f6f9; --card: #ffffff; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background-color: var(--bg); color: var(--secondary); margin: 0; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: var(--card); padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .header-app { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 15px; margin-bottom: 25px; }
+        .header-title h1 { margin: 0; font-size: 20px; color: var(--primary); font-weight: bold; }
+        .header-title p { margin: 5px 0 0 0; font-size: 13px; color: #666; }
+        .logo-txt { text-align: right; }
+        .logo-txt .red { color: var(--accent); font-weight: 900; font-size: 22px; margin: 0; }
+        .logo-txt .sub { color: var(--secondary); font-size: 12px; font-weight: bold; margin: 2px 0 0 0; }
+        h2 { font-size: 15px; border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 25px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media(max-width: 500px) { .grid { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        label { font-weight: 600; margin-bottom: 5px; font-size: 13px; }
+        input[type="text"], input[type="date"], textarea { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .checkbox-group input { width: 18px; height: 18px; accent-color: var(--primary); }
+        .checkbox-group label { font-size: 14px; font-weight: normal; }
+        .photo-section { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #ccc; }
+        .photo-input-wrapper { position: relative; }
+        .btn-capture { background: #e1e1e1; padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-weight: 500; font-size: 14px; border: 1px solid #bbb; }
+        .photo-section input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+        .preview-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .preview-box { width: 105px; position: relative; background: #fff; padding: 4px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+        .preview-box img { width: 100%; height: 75px; object-fit: cover; border-radius: 3px; }
+        .btn-delete-pic { position: absolute; top: -7px; right: -7px; background: rgba(227,6,19,0.9); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .summary-box { background: #eef2f7; padding: 15px; border-radius: 8px; margin-top: 25px; border-left: 4px solid var(--primary); font-size: 13px; }
+        .action-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .btn-download-all { background: #28a745; color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .btn-reset { background: #6c757d; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-app">
+        <div class="header-title">
+            <h1>Überprüfung für Durchlauferhitzer</h1>
+            <p>Elektro Fachbetrieb Jordine | GBP | GmbH</p>
+        </div>
+        <div class="logo-txt"><p class="red">%23ELEKTRO</p><p class="sub">Fachbetrieb Jordine</p></div>
+    </div>
+    <form id="protocolForm" onsubmit="event.preventDefault();">
+        <h2>Stammdaten</h2>
+        <div class="grid">
+            <div class="form-group"><label>Datum</label><input type="date" id="datum" required></div>
+            <div class="form-group"><label>Monteur Name</label><input type="text" id="monteur" placeholder="Name" oninput="updateSummary()"></div>
+        </div>
+        <div class="grid">
+            <div class="form-group"><label>Auftragsnummer</label><input type="text" id="auftragsnummer" placeholder="z.B. 2/261241" oninput="updateSummary()"></div>
+            <div class="form-group"><label>Adresse / Objekt</label><input type="text" id="adresse" placeholder="Straße, Ort" oninput="updateSummary()"></div>
+        </div>
+        <h2>Technische Parameter & Befunde</h2>
+        <div class="checkbox-group"><input type="checkbox" id="strom_vorhanden" onchange="updateSummary()"><label for="strom_vorhanden">Stromversorgung 3-polig (400V) bereits in Wohnung vorhanden</label></div>
+        <div class="checkbox-group"><input type="checkbox" id="fi_vorhanden" onchange="updateSummary()"><label for="fi_vorhanden">FI im Verteiler bisher verbaut (Sammel FI)</label></div>
+        <div class="checkbox-group"><input type="checkbox" id="wasser_begutachtet" onchange="updateSummary()"><label for="wasser_begutachtet">Wasseranschluss in Küche begutachtet</label></div>
+        <div class="grid" style="margin-top:10px;">
+            <div class="form-group"><label>Hausanschluss HAK Sicherungsgröße</label><input type="text" id="hak_groesse" placeholder="Sicherungsgröße" oninput="updateSummary()"></div>
+            <div class="form-group"><label>Verbraucher-SLS Schalter</label><input type="text" id="sls" placeholder="verbauter SLS" oninput="updateSummary()"></div>
+        </div>
+        <div class="form-group"><label>Aufnahme Kabelweg (Länge in Meter)</label><input type="text" id="kabelweg" placeholder="Kabelweglänge" oninput="updateSummary()"></div>
+        <h2>Fotodokumentation</h2>
+        <div class="photo-section" data-cat="Verteiler_Einbauort"><label>Verteiler + Einbauort</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <div class="photo-section" data-cat="Zaehler_SLS"><label>Verteiler (Zähler & SLS-Schalter)</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <div class="photo-section" data-cat="Wasseranschluss_Kueche"><label>Wasseranschluss Küche</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <div class="photo-section" data-cat="Gastherme"><label>Gastherme</label><div class="photo-input-wrapper"><span class="btn-capture">📸 Foto aufnehmen</span><input type="file" accept="image/*" onchange="processPhoto(this)"></div><div class="preview-container"></div></div>
+        <h2>Bemerkungen / Notizen</h2>
+        <div class="form-group"><textarea id="notizen" rows="3" placeholder="Zusätzliche Einträge..." oninput="updateSummary()"></textarea></div>
+        <div class="summary-box"><strong>🔍 Live-Vorschau:</strong><div id="summaryContent"></div></div>
+        <div class="action-buttons">
+            <button type="button" class="btn-download-all" onclick="downloadAllPhotos()">⚡ ALLE FOTOS auf einmal herunterladen</button>
+            <button type="button" class="btn-submit" onclick="generatePDF()">📄 Protokoll-PDF erstellen (ohne Bilder)</button>
+            <button type="button" class="btn-reset" onclick="resetFormular()">🔄 Formular leeren</button>
+        </div>
+    </form>
+</div>
+<script>
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+    document.getElementById('datum').valueAsDate = new Date();
+    let photoDataStore = [];
+    
+    function updateSummary() {
+        const m = document.getElementById('monteur').value || '-';
+        const n = document.getElementById('auftragsnummer').value || '-';
+        const a = document.getElementById('adresse').value || '-';
+        document.getElementById('summaryContent').innerHTML = `<p>Monteur: ${m} | Nr: ${n} | Ort: ${a}</p>`;
+    }
+    
+    function processPhoto(input) {
+        if (!input.files || !input.files[0]) return;
+        const category = input.closest('.photo-section').getAttribute('data-cat');
+        const container = input.closest('.photo-section').querySelector('.preview-container');
+        const nr = document.getElementById('auftragsnummer').value || 'OhneNummer';
+        const adr = (document.getElementById('adresse').value || 'UnbekannterOrt').replace(/[^a-zA-Z0-9]/g, "_");
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                const maxDim = 1200; let w = img.width, h = img.height;
+                if (w > h && w > maxDim) { h = (h * maxDim) / w; w = maxDim; } 
+                else if (h > maxDim) { w = (w * maxDim) / h; h = maxDim; }
+                
+                canvas.width = w; canvas.height = h; 
+                ctx.drawImage(img, 0, 0, w, h);
+                
+                const text = `Auftrag: ${document.getElementById('auftragsnummer').value || '-'} | Adresse: ${document.getElementById('adresse').value || '-'}`;
+                ctx.fillStyle = "rgba(0, 0, 0, 0.65)"; ctx.fillRect(0, h - 60, w, 60);
+                ctx.fillStyle = "#ffffff"; ctx.font = "bold 22px sans-serif"; ctx.textBaseline = "middle"; ctx.fillText(text, 20, h - 30);
+                
+                const finalDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                const count = photoDataStore.filter(p => p.category === category).length + 1;
+                const filename = `${nr}_${adr}_${category}_Foto${count}.jpg`;
+                
+                const photoObj = { id: Date.now(), category, filename, dataUrl: finalDataUrl };
+                photoDataStore.push(photoObj);
+                
+                const box = document.createElement('div'); box.className = 'preview-box'; box.setAttribute('data-id', photoObj.id);
+                box.innerHTML = `<button class="btn-delete-pic" onclick="deletePhoto(${photoObj.id})">×</button><img src="${finalDataUrl}">`;
+                container.appendChild(box); 
+                input.value = "";
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+    
+    function deletePhoto(id) { 
+        photoDataStore = photoDataStore.filter(p => p.id !== id); 
+        document.querySelector(`[data-id="${id}"]`).remove(); 
+    }
+    
+    function downloadAllPhotos() {
+        if(photoDataStore.length === 0) { alert("Keine Fotos vorhanden!"); return; }
+        photoDataStore.forEach((photo, index) => {
+            setTimeout(() => { 
+                const link = document.createElement('a'); link.download = photo.filename; link.href = photo.dataUrl; link.click(); 
+            }, index * 450);
+        });
+    }
+    
+    function resetFormular() {
+        if(confirm("Formular wirklich leeren?")) { 
+            document.getElementById('protocolForm').reset(); 
+            document.getElementById('datum').valueAsDate = new Date(); 
+            photoDataStore = []; 
+            document.querySelectorAll('.preview-container').forEach(c => c.innerHTML = ""); 
+            updateSummary(); 
+        }
+    }
+    
+    function generatePDF() {
+        const { jsPDF } = window.jspdf; const doc = new jsPDF();
+        // Titel oben links
+        doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(0, 86, 179); 
+        doc.text("Überprüfung für Durchlauferhitzer", 20, 24);
+        
+        // Logo-Ersatz auf Basis deines Beispiels (Dachform-Vektorlinien)
+        doc.setLineWidth(0.4); doc.setDrawColor(29, 29, 27);
+        doc.line(150, 25, 160, 15); doc.line(160, 15, 185, 15); doc.line(185, 15, 185, 25); doc.line(135, 25, 190, 25);
+        doc.setFontSize(8); doc.setTextColor(227, 6, 19); doc.setFont("helvetica", "bold"); doc.text("ELEKTRO", 160, 12);
+        
+        // Trennlinie unter Header
+        doc.setDrawColor(200, 200, 200); doc.line(20, 31, 190, 31);
+        
+        // Stammdaten Titel
+        doc.setFontSize(14); doc.setTextColor(29, 29, 27); doc.text("Stammdaten", 20, 42);
+        
+        // Daten Zeilen
+        doc.setFontSize(10);
+        let y = 50; 
+        const lbls = [
+            ["Datum:", document.getElementById('datum').value], 
+            ["Auftragsnummer:", document.getElementById('auftragsnummer').value || '-'], 
+            ["Monteur:", document.getElementById('monteur').value || '-'], 
+            ["Adresse / Objekt:", document.getElementById('adresse').value || '-']
+        ];
+        lbls.forEach(l => { 
+            doc.setFont("helvetica", "normal"); doc.text(l[0], 20, y); 
+            doc.setFont("helvetica", "bold"); doc.text(l[1], 55, y); 
+            y += 7; 
+        });
+        
+        // Technische Daten
+        y += 4; doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Technische Parameter & Befunde", 20, y); 
+        doc.line(20, y+2, 190, y+2); y += 10;
+        
+        const c1 = document.getElementById('strom_vorhanden').checked ? "JA" : "NEIN"; 
+        const c2 = document.getElementById('fi_vorhanden').checked ? "JA (Sammel FI)" : "NEIN"; 
+        const c3 = document.getElementById('wasser_begutachtet').checked ? "JA" : "NEIN";
+        
+        const tf = [
+            ["Stromversorgung 3-polig (400V) in Wohnung:", c1], 
+            ["FI im Verteiler verbaut (Sammel FI):", c2], 
+            ["Wasseranschluss in Küche begutachtet:", c3], 
+            ["Hausanschluss HAK Sicherungsgröße:", document.getElementById('hak_groesse').value || '-'], 
+            ["Verbraucher-SLS Schalter:", document.getElementById('sls').value || '-'], 
+            ["Aufnahme Kabelweg (Länge):", (document.getElementById('kabelweg').value || '-') + " Meter"]
+        ];
+        tf.forEach(f => { 
+            doc.setFont("helvetica", "normal"); doc.text(f[0], 20, y); 
+            doc.setFont("helvetica", "bold"); doc.text(f[1], 105, y); 
+            y += 7; 
+        });
+        
+        // Bemerkungen Block
+        y += 4; doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Bemerkungen", 20, y); 
+        doc.line(20, y+2, 190, y+2); y += 10; doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+        
+        const sn = doc.splitTextToSize(document.getElementById('notizen').value || 'Keine weiteren Einträge.', 170); doc.text(sn, 20, y);
+        
+        // Einheitliche Fußzeile am Seitenende (Exakt wie im Erdungs-Protokoll)
+        doc.setFontSize(8); doc.setTextColor(150, 150, 150); 
+        doc.text("Erstellt durch ABA Durchlauferhitzercheck-System", 20, 283); 
+        doc.text("Seite 1 von 1", 173, 283); 
+        doc.setFontSize(9); doc.setTextColor(29, 29, 27); 
+        doc.text("Elektro Fachbetrieb Jordine | GBP | GmbH - Fred-Joachim-Schoeps-Straße 3, 68229 Mannheim", 105, 290, { align: "center" });
+        
+        doc.save(`Protokoll_Durchlauferhitzer_${document.getElementById('auftragsnummer').value || 'OhneNummer'}.pdf`);
+    }
+    updateSummary();
+</script>
+</body>
+</html>
