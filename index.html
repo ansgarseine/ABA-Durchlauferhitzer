@@ -10,10 +10,13 @@
         :root { --primary: #0056b3; --accent: #e30613; --secondary: #1d1d1b; --bg: #f4f6f9; --card: #ffffff; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background-color: var(--bg); color: var(--secondary); margin: 0; padding: 20px; }
         .container { max-width: 700px; margin: 0 auto; background: var(--card); padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-        .header-app { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ccc; padding-bottom: 15px; margin-bottom: 25px; }
-        .header-title h1 { margin: 0; font-size: 20px; color: var(--primary); font-weight: bold; }
-        .header-title p { margin: 5px 0 0 0; font-size: 13px; color: #666; }
-        .logo-svg-container { width: 180px; height: auto; display: block; }
+        .header-app { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #ccc; padding-bottom: 15px; margin-bottom: 25px; }
+        .header-title h1 { margin: 15px 0 0 0; font-size: 22px; color: var(--primary); font-weight: bold; }
+        .logo-area { text-align: center; max-width: 210px; display: flex; flex-direction: column; align-items: center; }
+        .logo-placeholder { width: 180px; height: 80px; border: 2px dashed #bbb; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: #fafafa; cursor: pointer; position: relative; overflow: hidden; }
+        .logo-placeholder img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-placeholder span { font-size: 11px; color: #666; text-align: center; padding: 5px; font-weight: 600; }
+        .logo-area p { margin: 8px 0 0 0; font-size: 12px; font-weight: bold; color: var(--secondary); line-height: 1.3; }
         h2 { font-size: 15px; border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 25px; text-transform: uppercase; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media(max-width: 500px) { .grid { grid-template-columns: 1fr; } }
@@ -22,9 +25,9 @@
         input[type="text"], input[type="date"], textarea { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; }
         .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
         .checkbox-group input { width: 18px; height: 18px; accent-color: var(--primary); }
-        .checkbox-group label { font-size: 14px; font-weight: normal; }
+        .checkbox-group label { font-size: 14px; font-weight: normal; cursor: pointer; }
         .photo-section { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #ccc; }
-        .photo-section label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 14px; color: var(--secondary); }
+        .photo-section label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 14px; }
         .photo-input-wrapper { position: relative; margin-top: 5px; }
         .btn-capture { background: #e1e1e1; padding: 10px; border-radius: 6px; text-align: center; cursor: pointer; font-weight: 500; font-size: 14px; border: 1px solid #bbb; }
         .photo-section input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
@@ -42,21 +45,15 @@
 <body>
 <div class="container">
     <div class="header-app">
-        <div class="header-title">
-            <h1>Überprüfung für Durchlauferhitzer</h1>
-            <p>Elektro Fachbetrieb Jordine | GBP | GmbH</p>
+        <div class="header-title"><h1>Überprüfung für Durchlauferhitzer</h1></div>
+        <div class="logo-area">
+            <div class="logo-placeholder" onclick="document.getElementById('logoLoader').click()">
+                <img id="appLogo" src="" style="display:none;">
+                <span id="uploadText">📁 Original WebP-Logo<br>hier auswählen</span>
+            </div>
+            <input type="file" id="logoLoader" accept="image/*" style="display:none;" onchange="loadLogoFile(this)">
+            <p>Elektro Fachbetrieb<br>Jordine | GBP | GmbH</p>
         </div>
-        <!-- Das originale Firmenlogo als hochauflösender SVG-Vektor-Nachbau -->
-        <svg class="logo-svg-container" viewBox="0 0 540 230" xmlns="http://w3.org">
-            <path d="M 170 110 L 285 45 L 480 45 L 480 135 L 5 135" stroke="#1d1d1b" stroke-width="4" fill="none" stroke-linejoin="round"/>
-            <path d="M 480 90 L 510 90 L 510 102 L 522 102 L 522 108 L 510 108 L 510 120 L 480 120" stroke="#1d1d1b" stroke-width="4" fill="none" stroke-linejoin="round"/>
-            <path d="M 510 98 L 522 98 L 522 104" stroke="#1d1d1b" stroke-width="4" fill="none" stroke-linejoin="round"/>
-            <path d="M 5 135 L 65 135 Q 80 55 95 135 T 125 135 Q 140 55 155 135 L 180 135" stroke="#e30613" stroke-width="3" fill="none"/>
-            <path d="M 15 135 L 75 135 Q 90 55 105 135 T 135 135 Q 150 55 165 135 L 185 135" stroke="#1d1d1b" stroke-width="3" fill="none"/>
-            <text x="335" y="98" font-family="'Arial Black', sans-serif" font-weight="900" font-size="44" fill="#e30613" text-anchor="middle" letter-spacing="4">ELEKTRO</text>
-            <text x="335" y="165" font-family="'Arial', sans-serif" font-weight="bold" font-size="34" fill="#1d1d1b" text-anchor="middle" letter-spacing="3">Fachbetrieb</text>
-            <text x="260" y="215" font-family="'Arial', sans-serif" font-weight="bold" font-size="24" fill="#1d1d1b" text-anchor="middle">Jordine <tspan fill="#e30613">|</tspan> GBP <tspan fill="#e30613">|</tspan> GmbH</text>
-        </svg>
     </div>
     <form id="protocolForm" onsubmit="event.preventDefault();">
         <h2>Stammdaten</h2>
@@ -97,6 +94,26 @@
     document.getElementById('datum').valueAsDate = new Date();
     let photoDataStore = [];
     
+    if(localStorage.getItem('savedLogo')) {
+        const img = document.getElementById('appLogo');
+        img.src = localStorage.getItem('savedLogo');
+        img.style.display = 'block';
+        document.getElementById('uploadText').style.display = 'none';
+    }
+
+    function loadLogoFile(input) {
+        if (!input.files || !input.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            localStorage.setItem('savedLogo', e.target.result);
+            const img = document.getElementById('appLogo');
+            img.src = e.target.result;
+            img.style.display = 'block';
+            document.getElementById('uploadText').style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
     function updateSummary() {
         const m = document.getElementById('monteur').value || '-';
         const n = document.getElementById('auftragsnummer').value || '-';
@@ -105,140 +122,70 @@
     }
     
     function processPhoto(input) {
-        if (!input.files || !input.files) return;
+        if (!input.files || !input.files[0]) return;
         const category = input.closest('.photo-section').getAttribute('data-cat');
         const container = input.closest('.photo-section').querySelector('.preview-container');
         const nr = document.getElementById('auftragsnummer').value || 'OhneNummer';
         const adr = (document.getElementById('adresse').value || 'UnbekannterOrt').replace(/[^a-zA-Z0-9]/g, "_");
-        
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
                 const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
                 const maxDim = 1200; let w = img.width, h = img.height;
-                if (w > h && w > maxDim) { h = (h * maxDim) / w; w = maxDim; } 
-                else if (h > maxDim) { w = (w * maxDim) / h; h = maxDim; }
-                
-                canvas.width = w; canvas.height = h; 
-                ctx.drawImage(img, 0, 0, w, h);
-                
+                if (w > h && w > maxDim) { h = (h * maxDim) / w; w = maxDim; } else if (h > maxDim) { w = (w * maxDim) / h; h = maxDim; }
+                canvas.width = w; canvas.height = h; ctx.drawImage(img, 0, 0, w, h);
                 const text = `Auftrag: ${document.getElementById('auftragsnummer').value || '-'} | Adresse: ${document.getElementById('adresse').value || '-'}`;
                 ctx.fillStyle = "rgba(0, 0, 0, 0.65)"; ctx.fillRect(0, h - 60, w, 60);
                 ctx.fillStyle = "#ffffff"; ctx.font = "bold 22px sans-serif"; ctx.textBaseline = "middle"; ctx.fillText(text, 20, h - 30);
-                
                 const finalDataUrl = canvas.toDataURL('image/jpeg', 0.85);
                 const count = photoDataStore.filter(p => p.category === category).length + 1;
                 const filename = `${nr}_${adr}_${category}_Foto${count}.jpg`;
-                
                 const photoObj = { id: Date.now(), category, filename, dataUrl: finalDataUrl };
                 photoDataStore.push(photoObj);
-                
                 const box = document.createElement('div'); box.className = 'preview-box'; box.setAttribute('data-id', photoObj.id);
                 box.innerHTML = `<button class="btn-delete-pic" onclick="deletePhoto(${photoObj.id})">×</button><img src="${finalDataUrl}">`;
-                container.appendChild(box); 
-                input.value = "";
+                container.appendChild(box); input.value = "";
             };
             img.src = e.target.result;
         };
-        reader.readAsDataURL(input.files);
+        reader.readAsDataURL(input.files[0]);
     }
-    
-    function deletePhoto(id) { 
-        photoDataStore = photoDataStore.filter(p => p.id !== id); 
-        document.querySelector(`[data-id="${id}"]`).remove(); 
-    }
-    
+    function deletePhoto(id) { photoDataStore = photoDataStore.filter(p => p.id !== id); document.querySelector(`[data-id="${id}"]`).remove(); }
     function downloadAllPhotos() {
         if(photoDataStore.length === 0) { alert("Keine Fotos vorhanden!"); return; }
         photoDataStore.forEach((photo, index) => {
-            setTimeout(() => { 
-                const link = document.createElement('a'); link.download = photo.filename; link.href = photo.dataUrl; link.click(); 
-            }, index * 450);
+            setTimeout(() => { const link = document.createElement('a'); link.download = photo.filename; link.href = photo.dataUrl; link.click(); }, index * 450);
         });
     }
-    
     function resetFormular() {
-        if(confirm("Formular wirklich leeren?")) { 
-            document.getElementById('protocolForm').reset(); 
-            document.getElementById('datum').valueAsDate = new Date(); 
-            photoDataStore = []; 
-            document.querySelectorAll('.preview-container').forEach(c => c.innerHTML = ""); 
-            updateSummary(); 
-        }
+        if(confirm("Formular wirklich leeren?")) { document.getElementById('protocolForm').reset(); document.getElementById('datum').valueAsDate = new Date(); photoDataStore = []; document.querySelectorAll('.preview-container').forEach(c => c.innerHTML = ""); updateSummary(); }
     }
-    
     function generatePDF() {
         const { jsPDF } = window.jspdf; const doc = new jsPDF();
-        // 1. Blaue Hauptüberschrift links oben
-        doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(0, 86, 179); 
-        doc.text("Überprüfung für Durchlauferhitzer", 20, 24);
+        doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(0, 86, 179); doc.text("Überprüfung für Durchlauferhitzer", 20, 24);
         
-        // 2. Offizielles Firmenlogo maßgetreu in die rechte obere Ecke zeichnen
-        doc.setLineWidth(0.4); doc.setDrawColor(29, 29, 27);
-        doc.line(146, 23, 163, 13); doc.line(163, 13, 192, 13); doc.line(192, 13, 192, 27); doc.line(121, 27, 192, 27);
-        doc.line(192, 20, 196, 20); doc.line(196, 20, 196, 22); doc.line(196, 22, 198, 22); doc.line(198, 22, 198, 23); doc.line(196, 23, 196, 25); doc.line(196, 25, 192, 25);
-        doc.setDrawColor(227, 6, 19); doc.setLineWidth(0.3);
-        doc.line(122, 27, 131, 27); doc.line(140, 27, 149, 27);
-        doc.setFontSize(7); doc.setTextColor(227, 6, 19); doc.setFont("helvetica", "bold"); doc.text("ELEKTRO", 170, 21);
-        doc.setFontSize(5.5); doc.setTextColor(29, 29, 27); doc.text("Fachbetrieb Jordine", 166, 25);
+        const storedLogo = localStorage.getItem('savedLogo');
+        if (storedLogo) {
+            try { doc.addImage(storedLogo, 'WEBP', 145, 10, 45, 18); } catch(e) { console.error(e); }
+        }
+        doc.setFontSize(9); doc.setTextColor(29, 29, 27); doc.setFont("helvetica", "bold");
+        doc.text("Elektro Fachbetrieb", 167, 32, {align: "center"}); doc.text("Jordine | GBP | GmbH", 167, 36, {align: "center"});
+        doc.setDrawColor(200, 200, 200); doc.line(20, 41, 190, 41);
         
-        // Trennlinie unter Header
-        doc.setDrawColor(200, 200, 200); doc.line(20, 31, 190, 31);
+        doc.setFontSize(14); doc.setTextColor(29, 29, 27); doc.text("Stammdaten", 20, 52); doc.setFontSize(10);
+        let y = 60; const lbls = [["Datum:", document.getElementById('datum').value], ["Auftragsnummer:", document.getElementById('auftragsnummer').value || '-'], ["Monteur:", document.getElementById('monteur').value || '-'], ["Adresse / Objekt:", document.getElementById('adresse').value || '-']];
+        lbls.forEach(l => { doc.setFont("helvetica", "normal"); doc.text(l, 20, y); doc.setFont("helvetica", "bold"); doc.text(l, 55, y); y += 7; });
         
-        // Stammdaten Titel
-        doc.setFontSize(14); doc.setTextColor(29, 29, 27); doc.setFont("helvetica", "bold"); doc.text("Stammdaten", 20, 42);
+        y += 4; doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Technische Parameter & Befunde", 20, y); doc.line(20, y+2, 190, y+2); y += 10;
+        const c1 = document.getElementById('strom_vorhanden').checked ? "JA" : "NEIN"; const c2 = document.getElementById('fi_vorhanden').checked ? "JA (Sammel FI)" : "NEIN"; const c3 = document.getElementById('wasser_begutachtet').checked ? "JA" : "NEIN";
+        const tf = [["Stromversorgung 3-polig (400V) in Wohnung:", c1], ["FI im Verteiler verbaut (Sammel FI):", c2], ["Wasseranschluss in Küche begutachtet:", c3], ["Hausanschluss HAK Sicherungsgröße:", document.getElementById('hak_groesse').value || '-'], ["Verbraucher-SLS Schalter:", document.getElementById('sls').value || '-'], ["Aufnahme Kabelweg (Länge):", (document.getElementById('kabelweg').value || '-') + " Meter"]];
+        tf.forEach(f => { doc.setFont("helvetica", "normal"); doc.text(f, 20, y); doc.setFont("helvetica", "bold"); doc.text(f, 105, y); y += 7; });
         
-        // Stammdaten Werte
-        doc.setFontSize(10);
-        let y = 50; 
-        const lbls = [
-            ["Datum:", document.getElementById('datum').value], 
-            ["Auftragsnummer:", document.getElementById('auftragsnummer').value || '-'], 
-            ["Monteur:", document.getElementById('monteur').value || '-'], 
-            ["Adresse / Objekt:", document.getElementById('adresse').value || '-']
-        ];
-        lbls.forEach(l => { 
-            doc.setFont("helvetica", "normal"); doc.text(l, 20, y); 
-            doc.setFont("helvetica", "bold"); doc.text(l, 55, y); 
-            y += 7; 
-        });
-        
-        // Technische Daten Block
-        y += 4; doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Technische Parameter & Befunde", 20, y); 
-        doc.line(20, y+2, 190, y+2); y += 10;
-        
-        const c1 = document.getElementById('strom_vorhanden').checked ? "JA" : "NEIN"; 
-        const c2 = document.getElementById('fi_vorhanden').checked ? "JA (Sammel FI)" : "NEIN"; 
-        const c3 = document.getElementById('wasser_begutachtet').checked ? "JA" : "NEIN";
-        
-        const tf = [
-            ["Stromversorgung 3-polig (400V) in Wohnung:", c1], 
-            ["FI im Verteiler verbaut (Sammel FI):", c2], 
-            ["Wasseranschluss in Küche begutachtet:", c3], 
-            ["Hausanschluss HAK Sicherungsgröße:", document.getElementById('hak_groesse').value || '-'], 
-            ["Verbraucher-SLS Schalter:", document.getElementById('sls').value || '-'], 
-            ["Aufnahme Kabelweg (Länge):", (document.getElementById('kabelweg').value || '-') + " Meter"]
-        ];
-        tf.forEach(f => { 
-            doc.setFont("helvetica", "normal"); doc.text(f, 20, y); 
-            doc.setFont("helvetica", "bold"); doc.text(f, 105, y); 
-            y += 7; 
-        });
-        
-        // Bemerkungen Block
-        y += 4; doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Bemerkungen", 20, y); 
-        doc.line(20, y+2, 190, y+2); y += 10; doc.setFont("helvetica", "normal"); doc.setFontSize(10);
-        
+        y += 4; doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Bemerkungen", 20, y); doc.line(20, y+2, 190, y+2); y += 10; doc.setFont("helvetica", "normal"); doc.setFontSize(10);
         const sn = doc.splitTextToSize(document.getElementById('notizen').value || 'Keine weiteren Einträge.', 170); doc.text(sn, 20, y);
         
-        // 3. Gesetzte Fußzeile mit der exakten Firmenadresse am Seitenende
-        doc.setFontSize(8); doc.setTextColor(150, 150, 150); 
-        doc.text("Erstellt durch ABA Durchlauferhitzercheck-System", 20, 283); 
-        doc.text("Seite 1 von 1", 173, 283); 
-        doc.setFontSize(9); doc.setTextColor(29, 29, 27); 
-        doc.text("Elektro Fachbetrieb Jordine | GBP | GmbH - Fred-Joachim-Schoeps-Straße 3, 68229 Mannheim", 105, 290, { align: "center" });
-        
+        doc.setFontSize(8); doc.setTextColor(150, 150, 150); doc.text("Erstellt durch ABA Durchlauferhitzercheck-System", 20, 283); doc.text("Seite 1 von 1", 173, 283); doc.setFontSize(9); doc.setTextColor(29, 29, 27); doc.text("Elektro Fachbetrieb Jordine | GBP | GmbH - Fred-Joachim-Schoeps-Straße 3, 68229 Mannheim", 105, 290, { align: "center" });
         doc.save(`Protokoll_Durchlauferhitzer_${document.getElementById('auftragsnummer').value || 'OhneNummer'}.pdf`);
     }
     updateSummary();
